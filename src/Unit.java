@@ -3,13 +3,23 @@ public class Unit {
     protected int defence = 100;
     protected int power = 10;
 
-    protected float criticalChance = 0.1f;
-    protected float parryChance = 0.1f;
+    protected double criticalChance = 0.1;
+    protected double parryChance = 0.1;
+
+    protected boolean isCritical = false;
+    protected boolean isParry = false;
+
+
+    public String getName() {
+        return name;
+    }
 
     protected String name;
 
+    protected boolean isAlive = true;
+
+    public Unit() {}
     public Unit(String name) {
-        Game.countOfUnits++;
         this.name = name;
     }
 
@@ -25,11 +35,11 @@ public class Unit {
         return power;
     }
 
-    public float getCriticalChance() {
+    public double getCriticalChance() {
         return criticalChance;
     }
 
-    public float getParryChance() {
+    public double getParryChance() {
         return parryChance;
     }
 
@@ -45,11 +55,11 @@ public class Unit {
         this.power = power;
     }
 
-    public void setCriticalChance(float criticalChance) {
+    public void setCriticalChance(double criticalChance) {
         this.criticalChance = criticalChance;
     }
 
-    public void setParryChance(float parryChance) {
+    public void setParryChance(double parryChance) {
         this.parryChance = parryChance;
     }
 
@@ -66,7 +76,28 @@ public class Unit {
                 '}';
     }
 
+    public boolean isCritical() {
+        return isCritical;
+    }
+
+    public boolean isParry() {
+        return isParry;
+    }
+
     public void getDamage(int damage) {
-        this.health -= damage;
+        isParry = false;
+        if (isAlive && this.parryChance % 100 > 10) {
+            isParry = true;
+        } else if (isAlive && this.defence >= 0) {
+            this.defence -= damage;
+        } else if (isAlive && this.health > 0) {
+            this.health -= damage;
+        } else {
+            isAlive = false;
+        }
+    }
+
+    public boolean isAlive() {
+        return isAlive;
     }
 }

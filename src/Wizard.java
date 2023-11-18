@@ -4,23 +4,38 @@ public class Wizard extends Unit {
 
     public Wizard(String name) {
         super(name);
+        super.setCriticalChance(CustomRandomChance.getRandomChance() / 10.0);
+        super.setParryChance(CustomRandomChance.getRandomChance() / 10.0);
         power = 25;
         health = 80;
     }
 
     @Override
     public void attack(Unit unit) {
-        if (mana >= 0) {
+        if (this.power != 25) {
+            this.power = 25;
+        }
+        if (criticalChance % 10 > 5 && mana >= 10) {
+            criticalChance = CustomRandomChance.getRandomChance() / 10.0;
+            this.power += 10;
+        } else if (mana >= 10) {
+            this.power += mana / 10;
             super.attack(unit);
             mana -= 10;
         }
     }
 
     @Override
+    public void getDamage(int damage) {
+        super.getDamage(damage);
+        mana += damage * 10;
+    }
+
+    @Override
     public String toString() {
         return "Wizard{" +
-                "mana=" + mana +
-                ", health=" + health +
+                "health=" + health +
+                ", mana=" + mana +
                 ", defence=" + defence +
                 ", power=" + power +
                 '}';
